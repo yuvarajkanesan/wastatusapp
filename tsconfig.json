@@ -1,0 +1,8 @@
+{
+  "extends": "@react-native/typescript-config",
+  "compilerOptions": {
+    "strict": false,
+    "noImplicitAny": false
+  },
+  "exclude": ["node_modules", "decompiled", "manifest_resources", "android", "assets"]
+}
