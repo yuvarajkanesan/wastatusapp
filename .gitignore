@@ -34,6 +34,7 @@ local.properties
 *.keystore
 *.keystore.old*
 !debug.keystore
+*.jks
 .kotlin/
 keystore.properties
 
