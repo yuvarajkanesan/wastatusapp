@@ -6,9 +6,11 @@ import {
   FlatList,
   Image,
   Modal,
+  Alert,
   ToastAndroid,
   RefreshControl,
   StyleSheet,
+  useWindowDimensions,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Video from 'react-native-video';
@@ -18,6 +20,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { elevation } from '../constants/theme';
 import EmptyState from '../components/EmptyState';
 import Step from '../components/Step';
+import { getGridColumns } from '../utils/layout';
 import {
   pickStatusFolderSAF,
   saveStatus,
@@ -34,8 +37,6 @@ import {
 // closePreview, keyExtractor, renderItem, onRetry) came from the bytecode; the
 // IMAGES/VIDEOS toggle, header layout, and step-list help modal were corrected
 // against the real app's UI.
-
-const NUM_COLUMNS = 2;
 
 function formatExpiry(timestamp) {
   if (!timestamp) return null;
@@ -70,7 +71,9 @@ function getHelpSteps(isBusiness) {
 
 export default function HomeScreen({ variant = 'whatsapp' }) {
   const { colors } = useTheme();
-  const styles = makeStyles(colors);
+  const { width } = useWindowDimensions();
+  const numColumns = getGridColumns(width);
+  const styles = makeStyles(colors, numColumns);
   const insets = useSafeAreaInsets();
   const [tab, setTab] = useState(variant);
   const [mediaFilter, setMediaFilter] = useState('image');
@@ -121,7 +124,16 @@ export default function HomeScreen({ variant = 'whatsapp' }) {
   }, [mediaFilter]);
 
   const handlePickFolder = useCallback(async () => {
-    const uri = await pickStatusFolderSAF(tab === 'business');
+    const { uri, mismatchedApp } = await pickStatusFolderSAF(tab === 'business');
+    if (mismatchedApp) {
+      const expectedLabel = tab === 'business' ? 'WhatsApp Business' : 'WhatsApp';
+      const detectedLabel = mismatchedApp === 'business' ? 'WhatsApp Business' : 'WhatsApp';
+      Alert.alert(
+        'Wrong folder selected',
+        `That folder belongs to ${detectedLabel}, but this tab needs the ${expectedLabel} statuses folder.\n\nTap "Select Folder" again and navigate to the ${expectedLabel} folder this time — the picker reopens where you last left it, so it's easy to land back on the same one.`
+      );
+      return;
+    }
     if (uri) {
       setFolderUri(uri);
     }
@@ -397,12 +409,13 @@ export default function HomeScreen({ variant = 'whatsapp' }) {
           />
         ) : (
           <FlatList
+            key={numColumns}
             ref={listRef}
             data={statuses}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
             style={{ flex: 1 }}
-            numColumns={NUM_COLUMNS}
+            numColumns={numColumns}
             columnWrapperStyle={styles.row}
             contentContainerStyle={styles.grid}
             removeClippedSubviews
@@ -582,7 +595,7 @@ function formatTimeLabel(timestamp) {
   return `${displayHour}:${minutes} ${period}`;
 }
 
-const makeStyles = (colors) => StyleSheet.create({
+const makeStyles = (colors, numColumns) => StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   headerGradient: {
     ...elevation(colors.shadow, 'md'),
@@ -620,7 +633,7 @@ const makeStyles = (colors) => StyleSheet.create({
   row: { justifyContent: 'flex-start', gap: 8 },
   grid: { padding: 8 },
   cell: {
-    flex: 1 / NUM_COLUMNS,
+    flex: 1 / numColumns,
     aspectRatio: 0.72,
     borderRadius: 14,
     backgroundColor: colors.card,
@@ -760,7 +773,7 @@ const makeStyles = (colors) => StyleSheet.create({
   actBtnText: { color: colors.white, fontWeight: '700', fontSize: 13 },
   actBtnTextDark: { color: colors.primary },
   helpOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', alignItems: 'center', justifyContent: 'center' },
-  helpModal: { backgroundColor: colors.card, borderRadius: 20, padding: 20, width: '88%', maxHeight: '82%', ...elevation(colors.shadow, 'lg') },
+  helpModal: { backgroundColor: colors.card, borderRadius: 20, padding: 20, width: '88%', maxWidth: 480, maxHeight: '82%', ...elevation(colors.shadow, 'lg') },
   helpTitle: { fontSize: 18, fontWeight: '700', color: colors.primary, marginBottom: 14, textAlign: 'center' },
   helpToggleRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
   helpToggleBtn: {

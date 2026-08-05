@@ -37,6 +37,6 @@ const makeStyles = (colors) =>
       borderBottomColor: colors.border,
     },
     title: { fontSize: 16, fontWeight: '700', color: colors.text },
-    scrollContent: { padding: 16 },
+    scrollContent: { padding: 16, width: '100%', maxWidth: 640, alignSelf: 'center' },
     body: { fontSize: 13, color: colors.text, lineHeight: 20 },
   });

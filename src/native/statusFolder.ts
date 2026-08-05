@@ -60,28 +60,60 @@ export async function shareToWhatsApp(path, isBusiness, mimeType) {
   }
 }
 
+// SAF tree URIs encode the source path, e.g.
+// content://.../tree/primary%3AAndroid%2Fmedia%2Fcom.whatsapp.w4b%2F... — so which app's
+// folder was actually picked can be read back out of the uri itself. Returns null when the
+// uri doesn't look like either app's media folder (e.g. a manually organized custom folder),
+// in which case callers should let it through rather than block a legitimate choice.
+export function detectFolderOwner(uri) {
+  if (!uri) return null;
+  let decoded = uri;
+  try {
+    decoded = decodeURIComponent(uri);
+  } catch {
+    // already decoded, or malformed — fall back to matching the raw string
+  }
+  if (decoded.includes('com.whatsapp.w4b')) return 'business';
+  if (decoded.includes('com.whatsapp')) return 'whatsapp';
+  return null;
+}
+
 // tries the exact .Statuses folder first (pre-navigated via a content:// URI hack so
 // Android's system picker opens directly there), falls back to the parent Media folder,
 // then falls back to a plain folder picker with no starting location. Note: the
 // installed react-native-saf-x version's openDocumentTree only accepts `persist` — any
 // initial-location hint is ignored, so in practice this always opens the plain picker.
+//
+// Android's system picker also reopens at whatever folder you last browsed to, globally —
+// not scoped per app/tab. So right after picking WhatsApp's .Statuses folder, opening the
+// picker again for WhatsApp Business lands back in that same folder, and it's easy to tap
+// "Use this folder" on it again by mistake. Rather than silently caching a folder that
+// belongs to the other app under this tab's key, this checks the picked uri against what
+// was requested and reports a mismatch instead of caching it.
 export async function pickStatusFolderSAF(isBusiness) {
   let result = null;
   try {
     result = await SafX.openDocumentTree(true);
   } catch (e) {
     console.log('pickStatusFolderSAF error:', e.message);
-    return null;
+    return { uri: null, mismatchedApp: null };
   }
 
   if (!result) {
     console.log('User cancelled');
-    return null;
+    return { uri: null, mismatchedApp: null };
   }
 
   const uri = result.uri;
+  const detected = detectFolderOwner(uri);
+  const expected = isBusiness ? 'business' : 'whatsapp';
+  if (detected && detected !== expected) {
+    console.log('pickStatusFolderSAF mismatch: expected', expected, 'got', detected);
+    return { uri, mismatchedApp: detected };
+  }
+
   await setCachedSAFUri(uri, isBusiness);
-  return uri;
+  return { uri, mismatchedApp: null };
 }
 
 export async function setCachedSAFUri(uri, isBusiness) {

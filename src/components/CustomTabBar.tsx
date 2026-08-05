@@ -51,6 +51,7 @@ export default function CustomTabBar({ state, descriptors, navigation, insetBott
           <TouchableOpacity key={route.key} style={styles.tab} onPress={onPress} activeOpacity={0.7}>
             <Ionicons name={iconName} size={22} color={color} />
             <Text style={[styles.label, { color }, isFocused && styles.labelActive]}>{config.label}</Text>
+            {isFocused ? <View style={styles.underline} /> : null}
           </TouchableOpacity>
         );
       })}
@@ -84,5 +85,11 @@ const makeStyles = (colors: ThemeColors) =>
     },
     labelActive: {
       fontWeight: '800',
+    },
+    underline: {
+      height: 3,
+      width: 24,
+      backgroundColor: colors.gold,
+      borderRadius: 2,
     },
   });

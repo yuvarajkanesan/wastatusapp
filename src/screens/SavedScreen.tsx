@@ -9,6 +9,7 @@ import {
   ToastAndroid,
   RefreshControl,
   StyleSheet,
+  useWindowDimensions,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Video from 'react-native-video';
@@ -18,6 +19,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { elevation } from '../constants/theme';
 import EmptyState from '../components/EmptyState';
 import ConfirmDialog from '../components/ConfirmDialog';
+import { getGridColumns } from '../utils/layout';
 import {
   fetchSavedStatuses,
   deleteSavedFile,
@@ -31,11 +33,11 @@ import {
 // handleDelete, bulkDelete, bulkShare, keyExtractor, renderItem) came from the
 // decompiled bytecode; header/tab-count layout corrected against the real app's UI.
 
-const NUM_COLUMNS = 2;
-
 export default function SavedScreen() {
   const { colors } = useTheme();
-  const styles = makeStyles(colors);
+  const { width } = useWindowDimensions();
+  const numColumns = getGridColumns(width);
+  const styles = makeStyles(colors, numColumns);
   const insets = useSafeAreaInsets();
   const [mediaFilter, setMediaFilter] = useState('image');
   const [imageItems, setImageItems] = useState([]);
@@ -285,11 +287,12 @@ export default function SavedScreen() {
           />
         ) : (
           <FlatList
+            key={numColumns}
             ref={listRef}
             data={items}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
-            numColumns={NUM_COLUMNS}
+            numColumns={numColumns}
             columnWrapperStyle={styles.row}
             contentContainerStyle={styles.grid}
             onScrollToIndexFailed={handleScrollToIndexFailed}
@@ -407,7 +410,7 @@ export default function SavedScreen() {
   );
 }
 
-const makeStyles = (colors) => StyleSheet.create({
+const makeStyles = (colors, numColumns) => StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   headerGradient: {
     ...elevation(colors.shadow, 'md'),
@@ -428,7 +431,7 @@ const makeStyles = (colors) => StyleSheet.create({
   row: { justifyContent: 'flex-start', gap: 8 },
   grid: { padding: 8 },
   cell: {
-    flex: 1 / NUM_COLUMNS,
+    flex: 1 / numColumns,
     aspectRatio: 0.72,
     borderRadius: 14,
     backgroundColor: colors.card,

@@ -18,8 +18,9 @@ import { isDeviceRooted, checkIntegrity, authenticateBiometric } from './src/nat
 // Notable recovered detail: this app does NOT use @react-navigation's tab navigator at
 // runtime. It hand-rolls its own { index, routes } state and a minimal { emit, navigate }
 // object, passed into CustomTabBar so that component's props stay shape-compatible with
-// react-navigation's tabBar render prop. The four tabs are also dynamic — "BStatus" only
-// appears if WhatsApp Business is actually installed on the device.
+// react-navigation's tabBar render prop. "Status" and "BStatus" are each dynamic — a tab
+// only appears if that app (WhatsApp / WhatsApp Business) is actually installed on the
+// device. Saved and Settings always appear since they don't depend on either app.
 
 function AppContent() {
   const insets = useSafeAreaInsets();
@@ -31,11 +32,12 @@ function AppContent() {
   const [savedFocusedAt, setSavedFocusedAt] = useState(0);
 
   const routes = useMemo(() => {
-    const list = [{ key: 'Status', name: 'Status' }];
+    const list = [];
+    if (hasWA) list.push({ key: 'Status', name: 'Status' });
     if (hasWAB) list.push({ key: 'BStatus', name: 'BStatus' });
     list.push({ key: 'Saved', name: 'Saved' }, { key: 'Settings', name: 'Settings' });
     return list;
-  }, [hasWAB]);
+  }, [hasWA, hasWAB]);
 
   const tabState = useMemo(
     () => ({ index: routes.findIndex((r) => r.key === activeTab), routes }),
@@ -97,7 +99,17 @@ function AppContent() {
       const [wa, wab] = await Promise.all([isWhatsAppInstalled(), isWhatsAppBusinessInstalled()]);
       setHasWA(wa);
       setHasWAB(wab);
-      if (!wa && wab) setActiveTab('BStatus');
+      if (wa) {
+        setActiveTab('Status');
+      } else if (wab) {
+        setActiveTab('BStatus');
+      } else {
+        setActiveTab('Saved');
+        Alert.alert(
+          'WhatsApp Not Found',
+          "WaStatus Saver couldn't find WhatsApp or WhatsApp Business installed on this device. Install one of them to view and save statuses — media you've already saved is still available in the Saved tab."
+        );
+      }
       setReady(true);
     })();
   }, [runBiometricGate]);
