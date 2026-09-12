@@ -69,7 +69,7 @@ function getHelpSteps(isBusiness) {
   ];
 }
 
-export default function HomeScreen({ variant = 'whatsapp' }) {
+export default function HomeScreen({ variant = 'whatsapp', hasWA = true, hasWAB = true }) {
   const { colors } = useTheme();
   const { width } = useWindowDimensions();
   const numColumns = getGridColumns(width);
@@ -539,34 +539,36 @@ export default function HomeScreen({ variant = 'whatsapp' }) {
         <View style={styles.helpOverlay}>
           <View style={styles.helpModal}>
             <Text style={styles.helpTitle}>How to Use</Text>
-            <View style={styles.helpToggleRow}>
-              <TouchableOpacity
-                style={[styles.helpToggleBtn, helpTab === 'whatsapp' && styles.helpToggleBtnActive]}
-                onPress={() => setHelpTab('whatsapp')}
-              >
-                <Ionicons
-                  name="logo-whatsapp"
-                  size={14}
-                  color={helpTab === 'whatsapp' ? colors.white : colors.primary}
-                />
-                <Text style={[styles.helpToggleText, helpTab === 'whatsapp' && styles.helpToggleTextActive]}>
-                  {' '}WhatsApp
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.helpToggleBtn, helpTab === 'business' && styles.helpToggleBtnActive]}
-                onPress={() => setHelpTab('business')}
-              >
-                <Ionicons
-                  name="business-outline"
-                  size={14}
-                  color={helpTab === 'business' ? colors.white : colors.primary}
-                />
-                <Text style={[styles.helpToggleText, helpTab === 'business' && styles.helpToggleTextActive]}>
-                  {' '}Business
-                </Text>
-              </TouchableOpacity>
-            </View>
+            {hasWA && hasWAB ? (
+              <View style={styles.helpToggleRow}>
+                <TouchableOpacity
+                  style={[styles.helpToggleBtn, helpTab === 'whatsapp' && styles.helpToggleBtnActive]}
+                  onPress={() => setHelpTab('whatsapp')}
+                >
+                  <Ionicons
+                    name="logo-whatsapp"
+                    size={14}
+                    color={helpTab === 'whatsapp' ? colors.white : colors.primary}
+                  />
+                  <Text style={[styles.helpToggleText, helpTab === 'whatsapp' && styles.helpToggleTextActive]}>
+                    {' '}WhatsApp
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.helpToggleBtn, helpTab === 'business' && styles.helpToggleBtnActive]}
+                  onPress={() => setHelpTab('business')}
+                >
+                  <Ionicons
+                    name="business-outline"
+                    size={14}
+                    color={helpTab === 'business' ? colors.white : colors.primary}
+                  />
+                  <Text style={[styles.helpToggleText, helpTab === 'business' && styles.helpToggleTextActive]}>
+                    {' '}Business
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ) : null}
             {helpSteps.map((step, i) => (
               <View key={i} style={styles.helpStepRow}>
                 <View style={styles.helpStepIcon}>

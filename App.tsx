@@ -121,10 +121,10 @@ function AppContent() {
       <StatusBar backgroundColor="#075E54" barStyle="light-content" />
       <View style={[styles.container, { backgroundColor: colors.background }]}>
         <View style={styles.screen}>
-          {activeTab === 'Status' ? <StatusScreen /> : null}
-          {activeTab === 'BStatus' ? <BStatusScreen /> : null}
+          {activeTab === 'Status' ? <StatusScreen hasWA={hasWA} hasWAB={hasWAB} /> : null}
+          {activeTab === 'BStatus' ? <BStatusScreen hasWA={hasWA} hasWAB={hasWAB} /> : null}
           {activeTab === 'Saved' ? <SavedScreen key={savedFocusedAt} /> : null}
-          {activeTab === 'Settings' ? <SettingsScreen /> : null}
+          {activeTab === 'Settings' ? <SettingsScreen hasWA={hasWA} hasWAB={hasWAB} /> : null}
         </View>
         <CustomTabBar state={tabState} navigation={navigation} insetBottom={insets.bottom} />
       </View>

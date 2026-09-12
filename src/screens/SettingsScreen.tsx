@@ -69,11 +69,11 @@ const THEME_OPTIONS: { key: ThemeMode; icon: string }[] = [
   { key: 'Dark', icon: 'moon-outline' },
 ];
 
-export default function SettingsScreen() {
+export default function SettingsScreen({ hasWA = true, hasWAB = true }) {
   const { colors, themeMode, setThemeMode } = useTheme();
   const styles = makeStyles(colors);
   const insets = useSafeAreaInsets();
-  const [howToUseTab, setHowToUseTab] = useState('whatsapp');
+  const [howToUseTab, setHowToUseTab] = useState(hasWA || !hasWAB ? 'whatsapp' : 'business');
   const [legalModal, setLegalModal] = useState(null); // 'terms' | 'privacy' | null
 
   const openPlayStore = useCallback(() => {
@@ -84,7 +84,7 @@ export default function SettingsScreen() {
     Linking.openURL(`mailto:${SUPPORT_EMAIL}`);
   }, []);
 
-  const version = '1.0.5';
+  const version = '1.0.7';
   const steps = getSteps(howToUseTab === 'business');
 
   return (
@@ -120,26 +120,28 @@ export default function SettingsScreen() {
 
         <Text style={styles.sectionLabel}>HOW TO USE</Text>
         <View style={styles.card}>
-          <View style={styles.helpToggleRow}>
-            <TouchableOpacity
-              style={[styles.helpToggleBtn, howToUseTab === 'whatsapp' && styles.helpToggleBtnActive]}
-              onPress={() => setHowToUseTab('whatsapp')}
-            >
-              <Ionicons name="logo-whatsapp" size={14} color={howToUseTab === 'whatsapp' ? colors.white : colors.primary} />
-              <Text style={[styles.helpToggleText, howToUseTab === 'whatsapp' && styles.helpToggleTextActive]}>
-                {' '}WhatsApp
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.helpToggleBtn, howToUseTab === 'business' && styles.helpToggleBtnActive]}
-              onPress={() => setHowToUseTab('business')}
-            >
-              <Ionicons name="business-outline" size={14} color={howToUseTab === 'business' ? colors.white : colors.primary} />
-              <Text style={[styles.helpToggleText, howToUseTab === 'business' && styles.helpToggleTextActive]}>
-                {' '}WhatsApp Business
-              </Text>
-            </TouchableOpacity>
-          </View>
+          {hasWA && hasWAB ? (
+            <View style={styles.helpToggleRow}>
+              <TouchableOpacity
+                style={[styles.helpToggleBtn, howToUseTab === 'whatsapp' && styles.helpToggleBtnActive]}
+                onPress={() => setHowToUseTab('whatsapp')}
+              >
+                <Ionicons name="logo-whatsapp" size={14} color={howToUseTab === 'whatsapp' ? colors.white : colors.primary} />
+                <Text style={[styles.helpToggleText, howToUseTab === 'whatsapp' && styles.helpToggleTextActive]}>
+                  {' '}WhatsApp
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.helpToggleBtn, howToUseTab === 'business' && styles.helpToggleBtnActive]}
+                onPress={() => setHowToUseTab('business')}
+              >
+                <Ionicons name="business-outline" size={14} color={howToUseTab === 'business' ? colors.white : colors.primary} />
+                <Text style={[styles.helpToggleText, howToUseTab === 'business' && styles.helpToggleTextActive]}>
+                  {' '}WhatsApp Business
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : null}
 
           <View style={styles.infoBanner}>
             <Ionicons name="phone-portrait-outline" size={16} color={colors.primary} />

@@ -1,6 +1,19 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- No android.permission.INTERNET: all network-facing actions (Play Store link,
+         support email) are handed off to the browser/mail app via Linking, not made by
+         this app's own process, so it has no use for network access. -->
+
+    <!-- react-native-fs's own manifest declares WRITE_EXTERNAL_STORAGE with no
+         maxSdkVersion cap; it's only meaningful pre-scoped-storage (API <= 29) since all
+         reads here go through SAF and saves go through CameraRoll/MediaStore, so cap it
+         to match actual use and avoid an unbounded legacy-storage permission at API 30+. -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29"
+        tools:node="replace" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
     <!-- Required on Android 11+ (package visibility) so isAppInstalled() can see
          whether WhatsApp / WhatsApp Business are installed. -->
