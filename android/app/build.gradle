@@ -97,7 +97,7 @@ android {
         applicationId "com.wastatusapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 15
+        versionCode 16
         versionName "1.0.9"
     }
     signingConfigs {
@@ -130,10 +130,12 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             shrinkResources enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-            // Skip generating native debug symbols — they aren't shipped to users (Play
-            // strips them from device downloads), they only inflate the uploaded .aab.
+            // Symbol tables (function names, no full debug info) so Play Console can
+            // symbolicate native crashes/ANRs. Bundled into the .aab's own debug-symbols
+            // metadata — Play strips them before they ever reach a user's device, so
+            // this doesn't affect download size, only upload size.
             ndk {
-                debugSymbolLevel "none"
+                debugSymbolLevel "SYMBOL_TABLE"
             }
         }
     }
