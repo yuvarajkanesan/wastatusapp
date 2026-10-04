@@ -1,14 +1,18 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { View, StatusBar, Alert, BackHandler, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ThemeProvider, useTheme } from './src/contexts/ThemeContext';
 import CustomTabBar from './src/components/CustomTabBar';
+import WelcomeTips from './src/components/WelcomeTips';
 import StatusScreen from './src/screens/StatusScreen';
 import BStatusScreen from './src/screens/BStatusScreen';
 import SavedScreen from './src/screens/SavedScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import { isWhatsAppInstalled, isWhatsAppBusinessInstalled } from './src/native/statusFolder';
 import { isDeviceRooted, checkIntegrity, authenticateBiometric } from './src/native/security';
+
+const WELCOME_TIPS_KEY = 'has_seen_welcome_tips';
 
 // Reconstructed from decompiled Hermes bytecode (module #439 in the original bundle,
 // the true root component — module #528 was just app.json's {name, displayName}
@@ -30,6 +34,12 @@ function AppContent() {
   const [hasWAB, setHasWAB] = useState(false);
   const [ready, setReady] = useState(false);
   const [savedFocusedAt, setSavedFocusedAt] = useState(0);
+  const [showWelcomeTips, setShowWelcomeTips] = useState(false);
+
+  const dismissWelcomeTips = useCallback(() => {
+    setShowWelcomeTips(false);
+    AsyncStorage.setItem(WELCOME_TIPS_KEY, '1').catch(() => {});
+  }, []);
 
   const routes = useMemo(() => {
     const list = [];
@@ -96,6 +106,9 @@ function AppContent() {
 
       await runBiometricGate();
 
+      const hasSeenTips = await AsyncStorage.getItem(WELCOME_TIPS_KEY).catch(() => null);
+      if (!hasSeenTips) setShowWelcomeTips(true);
+
       const [wa, wab] = await Promise.all([isWhatsAppInstalled(), isWhatsAppBusinessInstalled()]);
       setHasWA(wa);
       setHasWAB(wab);
@@ -128,6 +141,7 @@ function AppContent() {
         </View>
         <CustomTabBar state={tabState} navigation={navigation} insetBottom={insets.bottom} />
       </View>
+      <WelcomeTips visible={showWelcomeTips} onDismiss={dismissWelcomeTips} />
     </>
   );
 }
