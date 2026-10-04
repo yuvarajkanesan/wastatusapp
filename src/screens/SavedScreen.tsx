@@ -189,8 +189,9 @@ export default function SavedScreen() {
       const dy = e.nativeEvent.pageY - touchStartY.current;
       touchStartX.current = null;
       if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
-        if (dx > 0) goPrevPreview();
-        else goNextPreview();
+        // Swipe right (finger moves right, dx > 0) -> next; swipe left -> previous.
+        if (dx > 0) goNextPreview();
+        else goPrevPreview();
       }
     },
     [goPrevPreview, goNextPreview]

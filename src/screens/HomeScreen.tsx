@@ -242,8 +242,9 @@ export default function HomeScreen({ variant = 'whatsapp', hasWA = true, hasWAB 
       const dy = e.nativeEvent.pageY - touchStartY.current;
       touchStartX.current = null;
       if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
-        if (dx > 0) goPrevPreview();
-        else goNextPreview();
+        // Swipe right (finger moves right, dx > 0) -> next; swipe left -> previous.
+        if (dx > 0) goNextPreview();
+        else goPrevPreview();
       }
     },
     [goPrevPreview, goNextPreview]
@@ -320,15 +321,18 @@ export default function HomeScreen({ variant = 'whatsapp', hasWA = true, hasWAB 
             {isSelected ? <Ionicons name="checkmark" size={14} color={colors.white} /> : null}
           </View>
         ) : (
-          <TouchableOpacity
-            style={[styles.dlBtn, isSaved && styles.dlBtnSaved]}
-            onPress={() => saveItem(item)}
-            disabled={isSaving || isSaved}
-          >
+          <TouchableOpacity style={styles.dlBtn} onPress={() => saveItem(item)} disabled={isSaving || isSaved}>
             <Ionicons
-              name={isSaved ? 'checkmark' : isSaving ? 'ellipsis-horizontal' : 'download'}
-              size={16}
-              color={colors.white}
+              name={
+                isSaved
+                  ? 'checkmark-circle-outline'
+                  : isSaving
+                  ? 'ellipsis-horizontal-circle-outline'
+                  : 'arrow-down-circle-outline'
+              }
+              size={30}
+              color={isSaved ? colors.accent : colors.white}
+              style={styles.dlBtnIcon}
             />
           </TouchableOpacity>
         )}
@@ -681,16 +685,20 @@ const makeStyles = (colors, numColumns) => StyleSheet.create({
   },
   dlBtn: {
     position: 'absolute',
-    bottom: 8,
-    right: 8,
-    backgroundColor: colors.downloadBtn,
-    borderRadius: 15,
+    bottom: 6,
+    right: 6,
     width: 30,
     height: 30,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  dlBtnSaved: { backgroundColor: '#4CAF50' },
+  // Outline ring + arrow icon, no background fill — the shadow is what keeps it
+  // legible over light/busy thumbnails instead of a solid backing circle.
+  dlBtnIcon: {
+    textShadowColor: 'rgba(0,0,0,0.65)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+  },
   checkbox: {
     position: 'absolute',
     top: 8,
