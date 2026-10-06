@@ -119,8 +119,8 @@ function AppContent() {
       } else {
         setActiveTab('Saved');
         Alert.alert(
-          'WhatsApp Not Found',
-          "WaStatus Saver couldn't find WhatsApp or WhatsApp Business installed on this device. Install one of them to view and save statuses — media you've already saved is still available in the Saved tab."
+          'WA Not Found',
+          "WaStatus Saver couldn't find WA or WA Business installed on this device. Install one of them to view and save statuses — media you've already saved is still available in the Saved tab."
         );
       }
       setReady(true);

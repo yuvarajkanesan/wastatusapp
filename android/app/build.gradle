@@ -97,8 +97,15 @@ android {
         applicationId "com.wastatusapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 18
-        versionName "1.1.0"
+        versionCode 20
+        versionName "1.1.2"
+        // Off by default (screenshots blocked, per FLAG_SECURE in MainActivity) — pass
+        // -PallowScreenshots to a build to flip it for a one-off QA install. Never set
+        // this for a build that's actually going to Play Console.
+        buildConfigField "boolean", "ALLOW_SCREENSHOTS", project.hasProperty('allowScreenshots') ? 'true' : 'false'
+    }
+    buildFeatures {
+        buildConfig true
     }
     signingConfigs {
         debug {
@@ -127,6 +134,13 @@ android {
             // NOT be uploaded to Play Console (wrong signature). Create the release
             // keystore and keystore.properties before shipping.
             signingConfig hasReleaseKeystore ? signingConfigs.release : signingConfigs.debug
+            // A -PallowScreenshots QA build installs as its own separate package
+            // (alongside the real com.wastatusapp) instead of trying to overwrite it —
+            // avoids the Play-Console-signed install on a tester's phone ever blocking
+            // (or being replaced by) a locally-signed QA build.
+            if (project.hasProperty('allowScreenshots')) {
+                applicationIdSuffix ".qa"
+            }
             minifyEnabled enableProguardInReleaseBuilds
             shrinkResources enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"

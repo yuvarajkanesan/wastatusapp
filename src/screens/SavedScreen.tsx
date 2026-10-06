@@ -188,10 +188,11 @@ export default function SavedScreen() {
       const dx = e.nativeEvent.pageX - touchStartX.current;
       const dy = e.nativeEvent.pageY - touchStartY.current;
       touchStartX.current = null;
-      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
-        // Swipe right (finger moves right, dx > 0) -> next; swipe left -> previous.
-        if (dx > 0) goNextPreview();
-        else goPrevPreview();
+      if (Math.abs(dx) > 25 && Math.abs(dx) > Math.abs(dy) * 0.5) {
+        // dx > 0 -> previous, dx < 0 -> next. (Confirmed against real on-device swipe
+        // behavior, not just coordinate math — don't "simplify" this without retesting.)
+        if (dx > 0) goPrevPreview();
+        else goNextPreview();
       }
     },
     [goPrevPreview, goNextPreview]
@@ -347,6 +348,27 @@ export default function SavedScreen() {
                 style={styles.modalImage}
                 resizeMode="contain"
               />
+            ) : null}
+            {/* The native video player (controls=true) owns touch inside its own view and
+                never lets onTouchStart/onTouchEnd above see it, so swipe-to-navigate silently
+                stopped working for videos. These two edge strips sit on top of the player
+                (later in the tree = higher z-order) and carry their own copy of the same
+                swipe handlers, giving a reliable swipe zone that doesn't depend on the video
+                view forwarding touches. Bottom is left uncovered so the native scrubber/
+                play-pause bar stays fully tappable. */}
+            {mediaFilter === 'video' ? (
+              <>
+                <View
+                  style={styles.modalSwipeEdgeLeft}
+                  onTouchStart={onPreviewTouchStart}
+                  onTouchEnd={onPreviewTouchEnd}
+                />
+                <View
+                  style={styles.modalSwipeEdgeRight}
+                  onTouchStart={onPreviewTouchStart}
+                  onTouchEnd={onPreviewTouchEnd}
+                />
+              </>
             ) : null}
           </View>
           <TouchableOpacity style={styles.modalClose} onPress={closePreview} hitSlop={12}>
@@ -505,6 +527,11 @@ const makeStyles = (colors, numColumns) => StyleSheet.create({
   modalBg: { flex: 1, backgroundColor: 'rgba(0,0,0,0.92)' },
   modalMedia: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   modalImage: { width: '100%', height: '75%' },
+  // Wide enough to also sit over where the native player's prev/next-track buttons
+  // render, so swiping there navigates between statuses instead of hitting them —
+  // narrower center strip is left clear for rewind/play-pause/forward taps.
+  modalSwipeEdgeLeft: { position: 'absolute', left: 0, top: 0, bottom: 64, width: '26%' },
+  modalSwipeEdgeRight: { position: 'absolute', right: 0, top: 0, bottom: 64, width: '26%' },
   modalClose: { position: 'absolute', top: 40, right: 20, padding: 6 },
   modalPrev: {
     position: 'absolute',

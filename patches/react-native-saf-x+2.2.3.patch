@@ -1,0 +1,99 @@
+diff --git a/node_modules/react-native-saf-x/android/.gradle/7.5.1/checksums/checksums.lock b/node_modules/react-native-saf-x/android/.gradle/7.5.1/checksums/checksums.lock
+deleted file mode 100644
+index 44583ad..0000000
+Binary files a/node_modules/react-native-saf-x/android/.gradle/7.5.1/checksums/checksums.lock and /dev/null differ
+diff --git a/node_modules/react-native-saf-x/android/.gradle/7.5.1/checksums/md5-checksums.bin b/node_modules/react-native-saf-x/android/.gradle/7.5.1/checksums/md5-checksums.bin
+deleted file mode 100644
+index 1027136..0000000
+Binary files a/node_modules/react-native-saf-x/android/.gradle/7.5.1/checksums/md5-checksums.bin and /dev/null differ
+diff --git a/node_modules/react-native-saf-x/android/.gradle/7.5.1/checksums/sha1-checksums.bin b/node_modules/react-native-saf-x/android/.gradle/7.5.1/checksums/sha1-checksums.bin
+deleted file mode 100644
+index 90de74e..0000000
+Binary files a/node_modules/react-native-saf-x/android/.gradle/7.5.1/checksums/sha1-checksums.bin and /dev/null differ
+diff --git a/node_modules/react-native-saf-x/android/.gradle/7.5.1/dependencies-accessors/dependencies-accessors.lock b/node_modules/react-native-saf-x/android/.gradle/7.5.1/dependencies-accessors/dependencies-accessors.lock
+deleted file mode 100644
+index 106051c..0000000
+Binary files a/node_modules/react-native-saf-x/android/.gradle/7.5.1/dependencies-accessors/dependencies-accessors.lock and /dev/null differ
+diff --git a/node_modules/react-native-saf-x/android/.gradle/7.5.1/dependencies-accessors/gc.properties b/node_modules/react-native-saf-x/android/.gradle/7.5.1/dependencies-accessors/gc.properties
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/node_modules/react-native-saf-x/android/.gradle/7.5.1/executionHistory/executionHistory.bin b/node_modules/react-native-saf-x/android/.gradle/7.5.1/executionHistory/executionHistory.bin
+deleted file mode 100644
+index ff4aed2..0000000
+Binary files a/node_modules/react-native-saf-x/android/.gradle/7.5.1/executionHistory/executionHistory.bin and /dev/null differ
+diff --git a/node_modules/react-native-saf-x/android/.gradle/7.5.1/executionHistory/executionHistory.lock b/node_modules/react-native-saf-x/android/.gradle/7.5.1/executionHistory/executionHistory.lock
+deleted file mode 100644
+index 703a760..0000000
+Binary files a/node_modules/react-native-saf-x/android/.gradle/7.5.1/executionHistory/executionHistory.lock and /dev/null differ
+diff --git a/node_modules/react-native-saf-x/android/.gradle/7.5.1/fileChanges/last-build.bin b/node_modules/react-native-saf-x/android/.gradle/7.5.1/fileChanges/last-build.bin
+deleted file mode 100644
+index f76dd23..0000000
+Binary files a/node_modules/react-native-saf-x/android/.gradle/7.5.1/fileChanges/last-build.bin and /dev/null differ
+diff --git a/node_modules/react-native-saf-x/android/.gradle/7.5.1/fileHashes/fileHashes.bin b/node_modules/react-native-saf-x/android/.gradle/7.5.1/fileHashes/fileHashes.bin
+deleted file mode 100644
+index 7253414..0000000
+Binary files a/node_modules/react-native-saf-x/android/.gradle/7.5.1/fileHashes/fileHashes.bin and /dev/null differ
+diff --git a/node_modules/react-native-saf-x/android/.gradle/7.5.1/fileHashes/fileHashes.lock b/node_modules/react-native-saf-x/android/.gradle/7.5.1/fileHashes/fileHashes.lock
+deleted file mode 100644
+index 4eb78df..0000000
+Binary files a/node_modules/react-native-saf-x/android/.gradle/7.5.1/fileHashes/fileHashes.lock and /dev/null differ
+diff --git a/node_modules/react-native-saf-x/android/.gradle/7.5.1/fileHashes/resourceHashesCache.bin b/node_modules/react-native-saf-x/android/.gradle/7.5.1/fileHashes/resourceHashesCache.bin
+deleted file mode 100644
+index edfb728..0000000
+Binary files a/node_modules/react-native-saf-x/android/.gradle/7.5.1/fileHashes/resourceHashesCache.bin and /dev/null differ
+diff --git a/node_modules/react-native-saf-x/android/.gradle/7.5.1/gc.properties b/node_modules/react-native-saf-x/android/.gradle/7.5.1/gc.properties
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/node_modules/react-native-saf-x/android/.gradle/buildOutputCleanup/buildOutputCleanup.lock b/node_modules/react-native-saf-x/android/.gradle/buildOutputCleanup/buildOutputCleanup.lock
+deleted file mode 100644
+index 9b6da89..0000000
+Binary files a/node_modules/react-native-saf-x/android/.gradle/buildOutputCleanup/buildOutputCleanup.lock and /dev/null differ
+diff --git a/node_modules/react-native-saf-x/android/.gradle/buildOutputCleanup/cache.properties b/node_modules/react-native-saf-x/android/.gradle/buildOutputCleanup/cache.properties
+deleted file mode 100644
+index 530a250..0000000
+--- a/node_modules/react-native-saf-x/android/.gradle/buildOutputCleanup/cache.properties
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#Wed Jan 18 10:07:34 IRST 2023
+-gradle.version=7.5.1
+diff --git a/node_modules/react-native-saf-x/android/.gradle/buildOutputCleanup/outputFiles.bin b/node_modules/react-native-saf-x/android/.gradle/buildOutputCleanup/outputFiles.bin
+deleted file mode 100644
+index c8880da..0000000
+Binary files a/node_modules/react-native-saf-x/android/.gradle/buildOutputCleanup/outputFiles.bin and /dev/null differ
+diff --git a/node_modules/react-native-saf-x/android/.gradle/file-system.probe b/node_modules/react-native-saf-x/android/.gradle/file-system.probe
+deleted file mode 100644
+index 47b15b3..0000000
+Binary files a/node_modules/react-native-saf-x/android/.gradle/file-system.probe and /dev/null differ
+diff --git a/node_modules/react-native-saf-x/android/.gradle/vcs-1/gc.properties b/node_modules/react-native-saf-x/android/.gradle/vcs-1/gc.properties
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/node_modules/react-native-saf-x/android/src/main/java/com/reactnativesafx/utils/EfficientDocumentHelper.java b/node_modules/react-native-saf-x/android/src/main/java/com/reactnativesafx/utils/EfficientDocumentHelper.java
+index 7653b7d..20a47f8 100644
+--- a/node_modules/react-native-saf-x/android/src/main/java/com/reactnativesafx/utils/EfficientDocumentHelper.java
++++ b/node_modules/react-native-saf-x/android/src/main/java/com/reactnativesafx/utils/EfficientDocumentHelper.java
+@@ -62,9 +62,22 @@ public class EfficientDocumentHelper {
+   private boolean permissionMatchesAndHasAccess(
+     UriPermission permission, String normalizedUriString) {
+     String permittedUri = permission.getUri().toString();
+-    return (normalizedUriString.startsWith(permittedUri))
+-      && permission.isReadPermission()
+-      && permission.isWritePermission();
++    if (!normalizedUriString.startsWith(permittedUri)) return false;
++    // A bare startsWith() lets a shorter granted URI (e.g. .../com.whatsapp) wrongly
++    // "match" an unrelated sibling path that merely shares that text as a prefix (e.g.
++    // .../com.whatsapp.w4b/...) since nothing requires a real path boundary right after
++    // the match. That collision is exactly why picking the WhatsApp Business folder
++    // failed whenever the regular WhatsApp folder was already granted first — this
++    // library then tried to traverse ".w4b" as a child of the regular folder. Require
++    // the next character to be a genuine segment separator (raw or percent-encoded),
++    // unless the match is already exact.
++    int matchEnd = permittedUri.length();
++    if (normalizedUriString.length() > matchEnd) {
++      String rest = normalizedUriString.substring(matchEnd);
++      boolean realBoundary = rest.startsWith("/") || rest.regionMatches(true, 0, "%2F", 0, 3);
++      if (!realBoundary) return false;
++    }
++    return permission.isReadPermission() && permission.isWritePermission();
+   }
+ 
+   private Uri getDocumentUri(String unknownUriStr, boolean createIfDirectoryNotExist, boolean includeLastSegment) throws IOException {

@@ -20,14 +20,14 @@ const PACKAGE_NAME = 'com.wastatusapp';
 const SUPPORT_EMAIL = 'yuvaraj8747@gmail.com';
 
 function getSteps(isBusiness) {
-  const app = isBusiness ? 'WhatsApp Business' : 'WhatsApp';
+  const app = isBusiness ? 'WA Business' : 'WA';
   const pkg = isBusiness ? 'com.whatsapp.w4b' : 'com.whatsapp';
   const folder = isBusiness ? 'WhatsApp Business' : 'WhatsApp';
   const tab = isBusiness ? 'B Status' : 'Status';
   return [
     {
       icon: isBusiness ? 'business-outline' : 'chatbubble-ellipses-outline',
-      title: isBusiness ? 'View WhatsApp Business Statuses' : 'View WhatsApp Statuses',
+      title: isBusiness ? 'View WA Business Statuses' : 'View WA Statuses',
       text: `Open ${app} and view any statuses. They must be viewed at least once before this app can show them.`,
     },
     {
@@ -46,7 +46,7 @@ function getSteps(isBusiness) {
       text: 'Tap "Use this folder" at the bottom, then tap "Allow" in the confirmation dialog.',
     },
     {
-      icon: 'download',
+      icon: 'arrow-down-circle-outline',
       title: 'Save a Status',
       text: 'Tap the ↓ button on any status to save it. Long-press any item to enter multi-select mode for bulk saving.',
     },
@@ -58,7 +58,7 @@ function getSteps(isBusiness) {
     {
       icon: 'share-social-outline',
       title: 'Share Statuses',
-      text: `Tap the share icon to share to any app, or tap the WhatsApp icon to send directly back to ${app}.`,
+      text: `Tap the share icon to share to any app, or tap the WA icon to send directly back to ${app}.`,
     },
   ];
 }
@@ -128,7 +128,7 @@ export default function SettingsScreen({ hasWA = true, hasWAB = true }) {
               >
                 <Ionicons name="logo-whatsapp" size={14} color={howToUseTab === 'whatsapp' ? colors.white : colors.primary} />
                 <Text style={[styles.helpToggleText, howToUseTab === 'whatsapp' && styles.helpToggleTextActive]}>
-                  {' '}WhatsApp
+                  {' '}WA
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -137,7 +137,7 @@ export default function SettingsScreen({ hasWA = true, hasWAB = true }) {
               >
                 <Ionicons name="business-outline" size={14} color={howToUseTab === 'business' ? colors.white : colors.primary} />
                 <Text style={[styles.helpToggleText, howToUseTab === 'business' && styles.helpToggleTextActive]}>
-                  {' '}WhatsApp Business
+                  {' '}WA Business
                 </Text>
               </TouchableOpacity>
             </View>
@@ -155,7 +155,7 @@ export default function SettingsScreen({ hasWA = true, hasWAB = true }) {
           <View style={styles.warningBanner}>
             <Text style={styles.warningBannerIcon}>💡</Text>
             <Text style={styles.warningBannerText}>
-              You need to open WhatsApp or WhatsApp Business and{' '}
+              You need to open WA or WA Business and{' '}
               <Text style={styles.warningBannerBold}>view the statuses at least once</Text> before they appear here.
             </Text>
           </View>

@@ -52,7 +52,7 @@ function formatExpiry(timestamp) {
 }
 
 function getHelpSteps(isBusiness) {
-  const app = isBusiness ? 'WhatsApp Business' : 'WhatsApp';
+  const app = isBusiness ? 'WA Business' : 'WA';
   const pkg = isBusiness ? 'com.whatsapp.w4b' : 'com.whatsapp';
   const folder = isBusiness ? 'WhatsApp Business' : 'WhatsApp';
   return [
@@ -63,8 +63,8 @@ function getHelpSteps(isBusiness) {
       text: `Tap "Select Folder" and navigate to:\n\nAndroid → media → ${pkg} → ${folder} → Media → .Statuses\n\n💡 Tap ⋮ → Show hidden files if .Statuses is not visible.`,
     },
     { icon: 'checkmark-circle-outline', title: '', text: 'Tap "Use this folder" then "Allow".' },
-    { icon: 'download', title: '', text: 'Tap ↓ to save. Long-press to select multiple items.' },
-    { icon: 'share-social-outline', title: '', text: 'Tap the share or WhatsApp icon to forward to anyone.' },
+    { icon: 'arrow-down-circle-outline', title: '', text: 'Tap ↓ to save. Long-press to select multiple items.' },
+    { icon: 'share-social-outline', title: '', text: 'Tap the share or WA icon to forward to anyone.' },
     { icon: 'cloud-download-outline', title: '', text: 'Find all saved files in the "Saved" tab.' },
   ];
 }
@@ -241,10 +241,11 @@ export default function HomeScreen({ variant = 'whatsapp', hasWA = true, hasWAB 
       const dx = e.nativeEvent.pageX - touchStartX.current;
       const dy = e.nativeEvent.pageY - touchStartY.current;
       touchStartX.current = null;
-      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
-        // Swipe right (finger moves right, dx > 0) -> next; swipe left -> previous.
-        if (dx > 0) goNextPreview();
-        else goPrevPreview();
+      if (Math.abs(dx) > 25 && Math.abs(dx) > Math.abs(dy) * 0.5) {
+        // dx > 0 -> previous, dx < 0 -> next. (Confirmed against real on-device swipe
+        // behavior, not just coordinate math — don't "simplify" this without retesting.)
+        if (dx > 0) goPrevPreview();
+        else goNextPreview();
       }
     },
     [goPrevPreview, goNextPreview]
@@ -258,7 +259,7 @@ export default function HomeScreen({ variant = 'whatsapp', hasWA = true, hasWAB 
     const opened = await shareToWhatsApp(path, tab === 'business', mimeType);
     if (!opened) {
       ToastAndroid.show(
-        `Couldn't share to ${tab === 'business' ? 'WhatsApp Business' : 'WhatsApp'}`,
+        `Couldn't share to ${tab === 'business' ? 'WA Business' : 'WA'}`,
         ToastAndroid.SHORT
       );
     }
@@ -343,7 +344,7 @@ export default function HomeScreen({ variant = 'whatsapp', hasWA = true, hasWAB 
 
   const isBusiness = tab === 'business';
   const label = isBusiness ? 'WhatsApp Business' : 'WhatsApp';
-  const headerTitle = isBusiness ? 'WA Business Status' : 'Status Saver';
+  const headerTitle = isBusiness ? 'WA Business Status' : 'WA Status';
   const helpSteps = getHelpSteps(helpTab === 'business');
 
   return (
@@ -451,7 +452,7 @@ export default function HomeScreen({ variant = 'whatsapp', hasWA = true, hasWAB 
             onPress={bulkSave}
             disabled={selected.size === 0}
           >
-            <Ionicons name="download" size={14} color={colors.primary} />
+            <Ionicons name="arrow-down-circle-outline" size={16} color={colors.primary} />
             <Text style={styles.bulkBtnText}>Save All</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -488,6 +489,27 @@ export default function HomeScreen({ variant = 'whatsapp', hasWA = true, hasWAB 
                 resizeMode="contain"
               />
             ) : null}
+            {/* The native video player (controls=true) owns touch inside its own view and
+                never lets onTouchStart/onTouchEnd above see it, so swipe-to-navigate silently
+                stopped working for videos. These two edge strips sit on top of the player
+                (later in the tree = higher z-order) and carry their own copy of the same
+                swipe handlers, giving a reliable swipe zone that doesn't depend on the video
+                view forwarding touches. Bottom is left uncovered so the native scrubber/
+                play-pause bar stays fully tappable. */}
+            {mediaFilter === 'video' ? (
+              <>
+                <View
+                  style={styles.modalSwipeEdgeLeft}
+                  onTouchStart={onPreviewTouchStart}
+                  onTouchEnd={onPreviewTouchEnd}
+                />
+                <View
+                  style={styles.modalSwipeEdgeRight}
+                  onTouchStart={onPreviewTouchStart}
+                  onTouchEnd={onPreviewTouchEnd}
+                />
+              </>
+            ) : null}
           </View>
           <TouchableOpacity style={styles.modalClose} onPress={closePreview} hitSlop={12}>
             <Ionicons name="close" size={26} color={colors.white} />
@@ -518,7 +540,7 @@ export default function HomeScreen({ variant = 'whatsapp', hasWA = true, hasWAB 
               style={styles.actBtn}
               onPress={() => previewIndex >= 0 && saveItem(statuses[previewIndex])}
             >
-              <Ionicons name="download" size={14} color={colors.primary} />
+              <Ionicons name="arrow-down-circle-outline" size={16} color={colors.primary} />
               <Text style={[styles.actBtnText, styles.actBtnTextDark]}>Save</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -533,7 +555,7 @@ export default function HomeScreen({ variant = 'whatsapp', hasWA = true, hasWAB 
             </TouchableOpacity>
             <TouchableOpacity style={[styles.actBtn, styles.actBtnWA]} onPress={shareToWA}>
               <Ionicons name="logo-whatsapp" size={14} color={colors.white} />
-              <Text style={styles.actBtnText}>WhatsApp</Text>
+              <Text style={styles.actBtnText}>WA</Text>
             </TouchableOpacity>
           </LinearGradient>
         </View>
@@ -555,7 +577,7 @@ export default function HomeScreen({ variant = 'whatsapp', hasWA = true, hasWAB 
                     color={helpTab === 'whatsapp' ? colors.white : colors.primary}
                   />
                   <Text style={[styles.helpToggleText, helpTab === 'whatsapp' && styles.helpToggleTextActive]}>
-                    {' '}WhatsApp
+                    {' '}WA
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -737,6 +759,11 @@ const makeStyles = (colors, numColumns) => StyleSheet.create({
   modalBg: { flex: 1, backgroundColor: 'rgba(0,0,0,0.92)' },
   modalMedia: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   modalImage: { width: '100%', height: '75%' },
+  // Wide enough to also sit over where the native player's prev/next-track buttons
+  // render, so swiping there navigates between statuses instead of hitting them —
+  // narrower center strip is left clear for rewind/play-pause/forward taps.
+  modalSwipeEdgeLeft: { position: 'absolute', left: 0, top: 0, bottom: 64, width: '26%' },
+  modalSwipeEdgeRight: { position: 'absolute', right: 0, top: 0, bottom: 64, width: '26%' },
   modalClose: { position: 'absolute', top: 40, right: 20, padding: 6 },
   modalPrev: {
     position: 'absolute',

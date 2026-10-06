@@ -7,13 +7,13 @@ import { elevation } from '../constants/theme';
 const TIPS = [
   {
     icon: 'eye-outline',
-    title: 'View it in WhatsApp first',
-    text: "WhatsApp only keeps a status after you've opened and viewed it at least once — do that first, then come back here to see it.",
+    title: 'View it in WA first',
+    text: "WA only keeps a status after you've opened and viewed it at least once — do that first, then come back here to see it.",
   },
   {
     icon: 'download-outline',
     title: 'Save or share instantly',
-    text: 'Tap the download icon to save a status to your gallery, or the share icon to send it straight back to WhatsApp or any app.',
+    text: 'Tap the download icon to save a status to your gallery, or the share icon to send it straight back to WA or any app.',
   },
   {
     icon: 'lock-closed-outline',

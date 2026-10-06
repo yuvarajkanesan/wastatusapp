@@ -1,0 +1,19 @@
+diff --git a/node_modules/react-native-video/android/src/main/java/com/brentvatne/exoplayer/ReactExoplayerView.java b/node_modules/react-native-video/android/src/main/java/com/brentvatne/exoplayer/ReactExoplayerView.java
+index e16ac96..a8465af 100644
+--- a/node_modules/react-native-video/android/src/main/java/com/brentvatne/exoplayer/ReactExoplayerView.java
++++ b/node_modules/react-native-video/android/src/main/java/com/brentvatne/exoplayer/ReactExoplayerView.java
+@@ -524,6 +524,14 @@ public class ReactExoplayerView extends FrameLayout implements
+     private void refreshControlsStyles() {
+         if (exoPlayerView == null || player == null || !controls) return;
+         updateControllerVisibility();
++        // hideNext/hidePrevious are parsed into controlsConfig but PlayerView no longer
++        // applies them on its own (see note below) — wire them to the real PlayerView
++        // API directly so they're not silently ignored.
++        androidx.media3.ui.PlayerView playerView = exoPlayerView.getPlayerView();
++        if (playerView != null) {
++            playerView.setShowPreviousButton(!controlsConfig.getHidePrevious());
++            playerView.setShowNextButton(!controlsConfig.getHideNext());
++        }
+     }
+ 
+     // Note: The following methods for live content and button visibility are no longer needed
